@@ -2,14 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour
+public class ClearCounter : BaseCounter
 {
-    [SerializeField] private KitchenObjectSO kitchenObjectSO; // scriptable object
-    [SerializeField] private Transform counterTopPoint;
-    public void Interact()
+    // [SerializeField] private KitchenObjectSO kitchenObjectSO; // scriptable object
+    // [SerializeField] private Transform counterTopPoint;
+    // private KitchenObject kitchenObject; // ClearCounter knows if there's something on top of it
+
+    // override the base Interact function
+    public override void Interact(Player player)
     {
-        Debug.Log("Interact!!!");
-        Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab, counterTopPoint);
-        kitchenObjectTransform.localPosition = Vector3.zero;
+        if (!HasKitchenObject())
+        {
+            if (player.HasKitchenObject())
+            {
+                player.GetKitchenObject().SetKitchenObjectParent(this);
+            }
+        }
+        else
+        {
+            if (!player.HasKitchenObject())
+            {
+                GetKitchenObject().SetKitchenObjectParent(player);
+            }
+        }
     }
 }

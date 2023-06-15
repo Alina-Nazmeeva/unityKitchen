@@ -5,6 +5,8 @@ public class GameInput : MonoBehaviour
 {
     // 1. define an event
     public event EventHandler OnInteractAction;
+    public event EventHandler OnInteractAlternateAction;
+
     private PlayerInputActions playerInputActions;
     private void Awake()
     {
@@ -14,6 +16,9 @@ public class GameInput : MonoBehaviour
 
         // add listener to the event ("E" is pressed) from InputAction.cs
         playerInputActions.Player.Interact.performed += Interact_performed;
+
+        // add listener to the event ("F" is pressed) from InputAction.cs
+        playerInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
     }
 
     // Listener signature should match the event signature
@@ -22,6 +27,11 @@ public class GameInput : MonoBehaviour
     {
         // 2. Fire the event (this event is being listened in Player.cs)
         OnInteractAction?.Invoke(this, EventArgs.Empty);
+    }
+    private void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        // 2. Fire the event (this event is being listened in Player.cs)
+        OnInteractAlternateAction?.Invoke(this, EventArgs.Empty);
     }
     public Vector2 GetMovementVectorNormalized()
     {

@@ -9,8 +9,8 @@ public class SelectedCounterVisual : MonoBehaviour
     // 2. All of the counter visuals listen to that event
     // 3. They identify if the event relates to that specific counter
     // 4. If so they update their state
-    [SerializeField] private ClearCounter clearCounter;
-    [SerializeField] private GameObject visualGameObject;
+    [SerializeField] private BaseCounter baseCounter;
+    [SerializeField] private GameObject[] visualGameObjectArray; // [] to support multiple visual objects
 
     private void Start()
     {
@@ -19,11 +19,19 @@ public class SelectedCounterVisual : MonoBehaviour
 
     private void Player_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArgs e)
     {
-        if (e.selectedCounter == clearCounter)
+        if (e.selectedCounter == baseCounter) Show();
+        else Hide();
+    }
+    private void Show()
+    {
+        foreach (GameObject visualGameObject in visualGameObjectArray)
         {
             visualGameObject.SetActive(true);
         }
-        else
+    }
+    private void Hide()
+    {
+        foreach (GameObject visualGameObject in visualGameObjectArray)
         {
             visualGameObject.SetActive(false);
         }
