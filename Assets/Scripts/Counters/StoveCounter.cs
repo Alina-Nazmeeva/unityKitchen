@@ -159,6 +159,7 @@ public class StoveCounter : BaseCounter, IHasProgress
             if (!player.HasKitchenObject())
             {
                 GetKitchenObject().SetKitchenObjectParent(player);
+
                 state = State.Idle;
 
                 // fire off the event for visuals
@@ -172,6 +173,33 @@ public class StoveCounter : BaseCounter, IHasProgress
                 {
                     progressNormalized = 0f // this will hide the progress bar
                 });
+            }
+            else
+            {
+                // if player has a plate we can put KitchenObject on it
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        // if this ingredient can be added to the plate, clear the counter
+                        GetKitchenObject().DestroySelf();
+
+
+                        state = State.Idle;
+
+                        // fire off the event for visuals
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
+                        {
+                            state = state
+                        });
+
+                        // fire off the event for progress bar to hide it
+                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = 0f // this will hide the progress bar
+                        });
+                    }
+                }
             }
         }
     }
