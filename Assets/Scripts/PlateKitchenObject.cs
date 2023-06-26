@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlateKitchenObject : KitchenObject
 {
-    // event for adding ingredient visuals to the plate complete visual
+    // event for adding ingredient visuals to the plate complete visual and to the PlateIconsUI
     public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
 
     public class OnIngredientAddedEventArgs : EventArgs
@@ -48,5 +48,10 @@ public class PlateKitchenObject : KitchenObject
             });
             return true;
         }
+    }
+
+    public List<KitchenObjectSO> GetKitchenObjectSOList()
+    {
+        return kitchenObjectSOList;
     }
 }
